@@ -23,7 +23,7 @@
 
 
    # тесты:  
-   vagrant@router1:~$ ip r
+vagrant@router1:~$ ip r
 default via 10.0.2.2 dev enp0s3 proto dhcp src 10.0.2.15 metric 100   
 10.0.2.0/24 dev enp0s3 proto kernel scope link src 10.0.2.15 metric 100   
 10.0.2.2 dev enp0s3 proto dhcp scope link src 10.0.2.15 metric 100   
@@ -41,7 +41,7 @@ PING 192.168.30.1 (192.168.30.1) 56(84) bytes of data.
 64 bytes from 192.168.30.1: icmp_seq=2 ttl=64 time=1.55 ms  
 64 bytes from 192.168.30.1: icmp_seq=3 ttl=64 time=1.30 ms  
 ^C  
---- 192.168.30.1 ping statistics ---  
+192.168.30.1 ping statistics   
 3 packets transmitted, 3 received, 0% packet loss, time 2015ms  
 rtt min/avg/max/mdev = 0.725/1.191/1.552/0.345 ms  
 vagrant@router1:~$ traceroute 192.168.30.1  
