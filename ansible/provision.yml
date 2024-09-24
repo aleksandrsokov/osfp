@@ -1,0 +1,67 @@
+---
+- name: OSPF
+  hosts: all
+  become: yes
+  #vars_files:
+    #- defaults/main.yml
+  tasks:
+
+  - name: add gpg frrouting.org
+    apt_key:
+      url: "https://deb.frrouting.org/frr/keys.asc"
+      state: present
+
+  - name: add frr repo
+    apt_repository:
+      repo: 'deb https://deb.frrouting.org/frr {{ ansible_distribution_release }} frr-stable'
+      state: present
+
+  - name: install base tools
+    apt:
+      name:
+        - vim
+        - traceroute
+        - tcpdump
+        - net-tools
+        - frr
+        - frr-pythontools
+      state: present
+      update_cache: true
+
+  - name: disable uwf
+    ufw: 
+      state: disabled
+
+  - name: set up forward packages across routers
+    sysctl:
+        name: net.ipv4.conf.all.forwarding
+        value: '1'
+        state: present
+
+  - name: set up asynchronous routing
+    sysctl:
+      name: net.ipv4.conf.all.rp_filter
+      value: '0'
+      state: present
+
+  - name: replase deamons files
+    template: 
+      src: "templates/deamons"
+      dest: "/etc/frr/daemons"
+      owner: frr
+      group: frr
+      mode: 0640
+
+  - name: copy config
+    template: 
+      src: "frr_{{ansible_hostname}}"
+      dest: /etc/frr/frr.conf
+      owner: frr
+      group: frr
+      mode: 0640
+
+  - name: restart FRR
+    service:
+      name: frr
+      state: restarted
+      enabled: true
